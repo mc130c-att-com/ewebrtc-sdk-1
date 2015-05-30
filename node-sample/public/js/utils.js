@@ -561,11 +561,7 @@ function onIncomingCall(data) {
 
   callerInfo = getCallerInfo(data.from);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    from = callerInfo.callerId;
-  } else {
-    from = phone.formatNumber(callerInfo.callerId);
-  }
+  from = callerInfo.callerId;
 
   if (phone.isCallInProgress()) {
 
@@ -599,11 +595,7 @@ function onConferenceInvite(data) {
 
   callerInfo = getCallerInfo(data.from);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    from = callerInfo.callerId;
-  } else {
-    from = phone.formatNumber(callerInfo.callerId);
-  }
+  from = callerInfo.callerId;
 
   answerBtn = '<button type="button" id="answer-button" class="btn btn-success btn-sm" onclick="join()">'
     + '<span class="glyphicon glyphicon-thumbs-up"></span></button>';
@@ -624,11 +616,7 @@ function onDialing(data) {
 
   callerInfo = getCallerInfo(data.to);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    to = callerInfo.callerId;
-  } else {
-    to = phone.formatNumber(callerInfo.callerId);
-  }
+  to = callerInfo.callerId;
 
   cancelBtn = '<button type="button" id="cancel-button" '
     + 'class="btn btn-danger btn-sm" onclick="cancel()">'
@@ -668,11 +656,7 @@ function onConnecting(data) {
 
   callerInfo = getCallerInfo(peer);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    peer = callerInfo.callerId;
-  } else {
-    peer = phone.formatNumber(callerInfo.callerId);
-  }
+  peer = callerInfo.callerId;
 
   if (undefined !== data.to) {
     cancelBtn = '<button type="button" id="cancel-button" '
@@ -700,11 +684,7 @@ function onCallConnected(data) {
 
   callerInfo = getCallerInfo(peer);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    peer = callerInfo.callerId;
-  } else {
-    peer = phone.formatNumber(callerInfo.callerId);
-  }
+  peer = callerInfo.callerId;
 
   setMessage('<h6>Connected to call ' + (data.from ? 'from ' : 'to ') + peer +
     (data.mediaType ? ". Media type: " + data.mediaType : '') +
@@ -777,11 +757,7 @@ function onAnswering(data) {
 
   callerInfo = getCallerInfo(data.from);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    from = callerInfo.callerId;
-  } else {
-    from = phone.formatNumber(callerInfo.callerId);
-  }
+  from = callerInfo.callerId;
 
   setMessage('<h6>Answering: ' + from +
     (data.mediaType ? ". Media type: " + data.mediaType : '') +
@@ -796,11 +772,7 @@ function onJoiningConference(data) {
 
   callerInfo = getCallerInfo(data.from);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    from = callerInfo.callerId;
-  } else {
-    from = phone.formatNumber(callerInfo.callerId);
-  }
+  from = callerInfo.callerId;
 
   setMessage('<h6>Joining conference initiated by: ' + from +
     (data.mediaType ? ". Media type: " + data.mediaType : '') +
@@ -890,11 +862,7 @@ function onCallDisconnected(data) {
 
   callerInfo = getCallerInfo(peer);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    peer = callerInfo.callerId;
-  } else {
-    peer = phone.formatNumber(callerInfo.callerId);
-  }
+  peer = callerInfo.callerId;
 
   setMessage('Call ' + (data.from ? ('from ' + peer) : ('to '  + peer)) + ' disconnected' +
     (data.message ? '. ' + data.message : '') + '. Time: ' + data.timestamp);
@@ -928,11 +896,7 @@ function onCallCanceled(data) {
 
   callerInfo = getCallerInfo(peer);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    peer = callerInfo.callerId;
-  } else {
-    peer = phone.formatNumber(callerInfo.callerId);
-  }
+  peer = callerInfo.callerId;
 
   setMessage('Call ' + (data.from ? ('from ' + peer) : ('to '  + peer)) + ' canceled.' + ' Time: ' + data.timestamp);
   resetUI();
@@ -955,11 +919,7 @@ function onCallRejected(data) {
 
   callerInfo = getCallerInfo(peer);
 
-  if (callerInfo.callerId.indexOf('@') > -1) {
-    peer = callerInfo.callerId;
-  } else {
-    peer = phone.formatNumber(callerInfo.callerId);
-  }
+  peer = callerInfo.callerId;
 
   setMessage('Call ' + (data.from ? ('from ' + peer) : ('to '  + peer)) + ' rejected.' + ' Time: ' + data.timestamp);
   document.getElementById('ringtone').pause();
@@ -981,44 +941,3 @@ function onAddressUpdated() {
   document.getElementById("address-box").style.display = 'none';
   setMessage('Updated E911 address successfully');
 }
-
-// Checks if the passed email address is valid
-function isValidEmail(input) {
-  var atPos = input.indexOf('@'),
-    dotPos = input.lastIndexOf('.');
-  if (atPos < 1 || dotPos < atPos + 2 || dotPos + 2 >= input.length) {
-    return false;
-  }
-  return true;
-}
-
-//Can get a formatted phone number from the public API
-function cleanupCallee(callee) {
-
-  if (isValidEmail(callee)) {
-    return callee;
-  }
-
-  return phone.cleanPhoneNumber(callee);
-}
-
-function cleanupNumber() {
-  var callee = document.forms.callForm.callee.value,
-    cleanNumber;
-
-  if (isValidEmail(callee)) {
-    setMessage(callee + ' is a valid e-mail address');
-    return;
-  }
-
-  cleanNumber = cleanupCallee(callee);
-
-  //for invalid number  it will go inside the If loop
-  if (!cleanNumber) {
-    setError("The number " + callee + " cannot be recognised ");
-    return;
-  }
-
-  setMessage(phone.formatNumber(cleanNumber));
-}
-
