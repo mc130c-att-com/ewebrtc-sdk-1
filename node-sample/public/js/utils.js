@@ -1,7 +1,7 @@
 /*jslint browser: true, devel: true, node: true, debug: true, todo: true, indent: 2, maxlen: 150*/
 /*global ATT, RESTClient, console, log, phone, holder, eWebRTCDomain,
   sessionData, defaultHeaders, onError, getCallerInfo,
-  loginMobileNumber, associateAccessToken, ewebrtc_domain,
+  loginMobileNumber, createAccessToken, associateAccessToken, createE911Id, ewebrtc_domain,
   loginEnhancedWebRTC, hideParticipants, showParticipants*/
 
 'use strict';
@@ -734,21 +734,7 @@ function onConferenceConnected(data) {
 
 // This event callback gets invoked when an outgoing call flow is initiated and the call state is changed to call established state
 function onMediaEstablished() {
-  document.getElementById('btn-hold').disabled = false;
-  document.getElementById('btn-resume').disabled = false;
-  document.getElementById('btn-mute').disabled = false;
-  document.getElementById('btn-unmute').disabled = false;
-  document.getElementById('btn-resume').disabled = false;
-  document.getElementById('btn-move').disabled = false;
-
-  if ('audio' === phone.getMediaType()) {
-    document.getElementById('btn-upgrade').disabled = false;
-    document.getElementById('btn-downgrade').disabled = true;
-  } else {
-    document.getElementById('btn-upgrade').disabled = true;
-    document.getElementById('btn-downgrade').disabled = false;
-  }
-
+  enableUI();
 }
 
 function onAnswering(data) {
@@ -840,11 +826,11 @@ function onTransferred(data) {
 
 function onMediaModification(data) {
   setMessage('Call Modificaton in progress to ' + data.mediaType + '. Time: ' + data.timestamp);
-
 }
 
 function onStateChanged(data) {
   setMessage('Call Modification Successful . State :' + data.state + '. Time: ' + data.timestamp);
+  enableUI();
 }
 
 function onCallDisconnected(data) {
@@ -927,12 +913,14 @@ function onCallRejected(data) {
 }
 
 function onCallModification(data) {
-  var acceptModButton, rejectModButton;
+  var acceptModButton;
+  //rejectModButton;
   if (phone.isCallInProgress()) {
 
     acceptModButton = '<button type="button" id="accept-mod-button" class="btn btn-success btn-sm" onclick="acceptModification()">'
       + '<span class="glyphicon glyphicon-ok"></span></button>';
-    setMessage('<h6>Call is being  modified from ' + phone.getMediaType() + ' To ' + data.mediaType + '. Time: ' + data.timestamp + ' </h6>' + acceptModButton, 'call:incoming');
+    setMessage('<h6>Call is being  modified from ' + phone.getMediaType() + ' To ' + data.mediaType + '. Time: ' +
+      data.timestamp + ' </h6>' + acceptModButton, 'call:incoming');
 
   }
 }
