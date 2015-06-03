@@ -34,16 +34,16 @@ The following features will be added soon:
 *	Upgrade or downgrade between audio and video
 *	DTMF (dialing) tones
 
-# v1.0.0-rc.19
+# v1.0.0-rc.20
 
-May 29, 2015
+June 2, 2015
 
-* **Fix**: The returned object of `getCallerInfo()` is improperly formatted for Account ID users.
-* **Fix**: Sample app shows username encoded as a number for Account Id users.
-* **Fix**: Intermittent `ice-ufrag` error when answering call.
+* **New**: Upgrade an audio call to video call.
 
 ## Known Issues
 
+* Upgrade after downgrade doesn't work due a known issue with the underlying platform. 
+* Moving Video Call from MOBILE_NUMBER to MOBILE_NUMBER fails when in call with another MOBILE_NUMBER. 
 * Moving Video Call from Browser to Browser fails when in call with a provisioned Mobile Device. 
 * Transfer from Browser to a Provisioned non-VoLTE Mobile device fails with different reasons. 
 * Transfer from a provisioned Mobile Device to a Account ID fails with `External Server request timeout`. 
@@ -116,6 +116,14 @@ invitation rejected event.
 
 
 # Changelog
+
+# v1.0.0-rc.19
+
+May 29, 2015
+
+* **Fix**: The returned object of `getCallerInfo()` is improperly formatted for Account ID users.
+* **Fix**: Sample app shows username encoded as a number for Account Id users.
+* **Fix**: Intermittent `ice-ufrag` error when answering call.
 
 ## v1.0.0-rc.18
 
