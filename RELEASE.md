@@ -34,11 +34,11 @@ The following features will be added soon:
 *	Upgrade or downgrade between audio and video
 *	DTMF (dialing) tones
 
-# v1.0.0-rc.20
+# v1.0.0-rc.21
 
-June 2, 2015
+June 5, 2015
 
-* **New**: Upgrade an audio call to video call.
+* **Fix**: One-way audio on non-provisioned VoLTE handset following call transfer.
 
 ## Known Issues
 
@@ -117,7 +117,13 @@ invitation rejected event.
 
 # Changelog
 
-# v1.0.0-rc.19
+## v1.0.0-rc.20
+
+June 2, 2015
+
+* **New**: Upgrade an audio call to video call.
+
+## v1.0.0-rc.19
 
 May 29, 2015
 
