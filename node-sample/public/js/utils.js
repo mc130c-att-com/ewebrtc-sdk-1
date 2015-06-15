@@ -7,7 +7,9 @@
 'use strict';
 
 var buttons,
-  defaultHeaders;
+  defaultHeaders,
+  autoRejectTimer,
+  autoRejectWaitingTime = 5000;
 
 defaultHeaders = {
   'Content-Type': 'application/json',
@@ -825,11 +827,15 @@ function onTransferred(data) {
 }
 
 function onMediaModification(data) {
-  setMessage('Call Modificaton in progress to ' + data.mediaType + '. Time: ' + data.timestamp);
+  setMessage('Call is being modified to ' + data.mediaType + '. Time: ' + data.timestamp);
 }
 
 function onStateChanged(data) {
-  setMessage('Call Modification Successful . State :' + data.state + '. Time: ' + data.timestamp);
+  if ('modification-in-progress' === data.oldState) {
+    setMessage('Call modified to ' + data.mediaType + '. Time: ' + data.timestamp);
+  } else {
+    setMessage('Call state changed from ' + data.oldState + ' to ' + data.newState + '. Time: ' + data.timestamp);
+  }
   enableUI();
 }
 
@@ -912,15 +918,51 @@ function onCallRejected(data) {
   document.getElementById('calling-tone').pause();
 }
 
-function onCallModification(data) {
-  var acceptModButton;
-  //rejectModButton;
-  if (phone.isCallInProgress()) {
+function autoRejectCallModification(time) {
+  autoRejectTimer = setTimeout(function () {
+    if (phone.isCallInProgress()) {
+      rejectModification();
+      setMessage('Call modification automatically rejected!', 'warning');
+    }
+  }, time);
+}
 
-    acceptModButton = '<button type="button" id="accept-mod-button" class="btn btn-success btn-sm" onclick="acceptModification()">'
+function disableAutoReject() {
+  clearTimeout(autoRejectTimer);
+}
+
+function disableTimerAndAccept() {
+  disableAutoReject();
+  acceptModification();
+}
+
+function disableTimerAndReject() {
+  disableAutoReject();
+  rejectModification();
+}
+
+function onCallModification(data) {
+  var peer,
+    callerInfo,
+    acceptModButton,
+    rejectModButton;
+
+  autoRejectCallModification(autoRejectWaitingTime);
+
+  peer = data.from || data.to;
+
+  callerInfo = getCallerInfo(peer);
+
+  peer = callerInfo.callerId;
+
+  if (phone.isCallInProgress()) {
+    acceptModButton = '<button type="button" id="accept-mod-button" class="btn btn-success btn-sm" onclick="disableTimerAndAccept()">'
       + '<span class="glyphicon glyphicon-ok"></span></button>';
-    setMessage('<h6>Call is being  modified from ' + phone.getMediaType() + ' To ' + data.mediaType + '. Time: ' +
-      data.timestamp + ' </h6>' + acceptModButton, 'call:incoming');
+    rejectModButton = '<button type="button" id="reject-mod-button" class="btn btn-danger btn-sm" onclick="disableTimerAndReject()">'
+    + '<span class="glyphicon glyphicon-remove"></span></button>';
+
+    setMessage('<h6><bold>' + peer + '</bold>' +' is requesting to modify the call from ' + data.mediaType + ' to ' + data.newMediaType + '. Time: ' +
+      data.timestamp + ' </h6>' + acceptModButton + rejectModButton, 'call:incoming');
 
   }
 }

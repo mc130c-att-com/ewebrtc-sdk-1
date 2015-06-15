@@ -378,14 +378,14 @@ on the fired event.</p>
     <h4 class="name" id="acceptModification"><span class="type-signature"></span>acceptModification<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
-    <p class="summary">AcceptModification accepts the incoming call modification request.</p>
+    <p class="summary">Accept the incoming call modification request.</p>
     
 </dt>
 <dd>
     
     
     <div class="description">
-        <p>Use this function to accept a call modification request for an ongoing Call.<br>
+        <p>Use this function to accept a call modification request for an ongoing call.<br>
 This method fires <a href="Phone.html#event:call:modification-in-progress">Phone#call:modification-in-progress</a> initially and <a href="Phone.html#event:call:state-changed">Phone#call:state-changed</a> on success.</p>
 <p>This method can fire <a href="Phone.html#event:error">Phone#event:error</a> that can have these error codes:</p>
 <p><strong>Error Codes</strong></p>
@@ -599,7 +599,8 @@ hold explicitly (using the hold function).</p>
 
             
 
-            <td class="description last"><p>The phone number or user id of the called party (without 'sip:' or 'tel:').</p></td>
+            <td class="description last"><p>The phone number <strong>(Dialing 11 digit phone numbers is required with the
+exception of special numbers like 911.)</strong> or user id of the called party (without 'sip:' or 'tel:').</p></td>
         </tr>
 
 	
@@ -779,7 +780,7 @@ hold explicitly (using the hold function).</p>
     <pre class="sunlight-highlight-javascript">&#x2F;&#x2F; Add a video call with an Mobile Number User
 var phone = ATT.rtc.Phone.getPhone();
 phone.addCall({
-  destination: &#x27;1231231234&#x27;, &#x2F;&#x2F;1800CALLFEDX, 1 (123) 123-1234
+  destination: &#x27;11231231234&#x27;, &#x2F;&#x2F;1800CALFEDX, 1 (123) 123-1234
   localMedia: document.getElementById(&#x27;localVideo&#x27;),
   remoteMedia: document.getElementById(&#x27;remoteVideo&#x27;),
   mediaType: &#x27;video&#x27;
@@ -874,7 +875,8 @@ Only a host side can invoke addParticipants.</p>
 
             
 
-            <td class="description last"><p>List of participant-ids</p></td>
+            <td class="description last"><p>List of participant-ids <strong>(Dialing 11 digit phone numbers is required with the
+exception of special numbers like 911.)</strong></p></td>
         </tr>
 
 	
@@ -1838,7 +1840,7 @@ Note: Will ignore email formatted input</p>
         <h5>Example</h5>
         
     <pre class="sunlight-highlight-javascript">var phone = ATT.rtc.Phone.getPhone();
-phone.cleanPhoneNumber(&#x27;1800CALFEDE&#x27;); &#x2F;&#x2F;1800223333</pre>
+phone.cleanPhoneNumber(&#x27;1800CALFEDE&#x27;); &#x2F;&#x2F;18002253333</pre>
 
 
     
@@ -1975,7 +1977,8 @@ providing the destination, call media type information and local and remote medi
 
             
 
-            <td class="description last"><p>The Phone Number or User Id of the called party (without sip or tel URI)</p></td>
+            <td class="description last"><p>The Phone Number <strong>(Dialing 11 digit phone numbers is required with the exception
+of special numbers like 911.)</strong> or User Id of the called party (without sip or tel URI)</p></td>
         </tr>
 
 	
@@ -2155,7 +2158,7 @@ providing the destination, call media type information and local and remote medi
     <pre class="sunlight-highlight-javascript">&#x2F;&#x2F; Start video call with an Mobile Number&#x2F;Virtual Number User
 var phone = ATT.rtc.Phone.getPhone();
 phone.dial({
-  destination: &#x27;11231231234&#x27;, &#x2F;&#x2F;1800CALLFEDX, 1 (123) 123-1234
+  destination: &#x27;11231231234&#x27;, &#x2F;&#x2F;1800CALFEDX, 1 (123) 123-1234
   localMedia: document.getElementById(&#x27;localVideo&#x27;),
   remoteMedia: document.getElementById(&#x27;remoteVideo&#x27;)
 });</pre>
@@ -2188,7 +2191,7 @@ phone.dial({
     <h4 class="name" id="downgrade"><span class="type-signature"></span>downgrade<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
-    <p class="summary">Downgrade the current call to audio</p>
+    <p class="summary">Downgrade the current video call to audio</p>
     
 </dt>
 <dd>
@@ -4636,6 +4639,99 @@ phone.rejectConference();</pre>
         
             
 <dt>
+    <h4 class="name" id="rejectModification"><span class="type-signature"></span>rejectModification<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+    <p class="summary">Rejects the incoming media modification (Upgrade/Downgrade) request.</p>
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>You can use this method after you have received the <a href="Phone.html#event:call:media-modification">Phone#call:media-modification</a>
+event which indicates an incoming media modification request.</p>
+<p>Rejecting an upgrade request when in an audio call means only the other peer will start sending
+her video. The peer that rejected will keep sending only his audio.</p>
+<p><strong>Error Codes</strong></p>
+<ul>
+<li>32000 - Failed to reject modification, there is not an active call.</li>
+<li>32001 - Failed to reject modification, there is no modification to reject.</li>
+<li>32002 - Failed to reject modification, active call is in an invalid state.</li>
+</ul>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+    
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="Phone.html#event:call:modification-in-progress">Phone#call:modification-in-progress</a></li>
+    
+        <li><a href="Phone.html#event:call:state-changed">Phone#call:state-changed</a></li>
+    
+        <li><a href="Phone.html#event:error">Phone#event:error</a></li>
+    </ul>
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">var phone = ATT.rtc.Phone.getPhone();
+phone.rejectModification();</pre>
+
+
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="removeParticipant"><span class="type-signature"></span>removeParticipant<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
@@ -6000,7 +6096,7 @@ phone.unmute();</pre>
     
     <div class="description">
         <p>Use this function to upgrade the current audio call to a video call.<br>
-This method fires <a href="Phone.html#event:call:modification-in-progress">Phone#call:modification-in-progress</a> initially and Phone#call:upgrading when successful.</p>
+This method fires <a href="Phone.html#event:call:modification-in-progress">Phone#call:modification-in-progress</a> initially and <a href="Phone.html#event:call:state-changed">Phone#call:state-changed</a> when successful.</p>
 <p>This method can fire <a href="Phone.html#event:error">Phone#event:error</a> that can have these error codes:</p>
 <p><strong>Error Codes</strong></p>
 <ul>
@@ -8094,7 +8190,7 @@ This event is fired in response to a successful call to <code>hold</code> method
     
     
     <p class="summary">Call media-modification event gets triggered when user needs to perform an action for the incoming
-Media-modification</p>
+media modification</p>
     
 </dt>
 <dd>
@@ -8267,7 +8363,36 @@ Media-modification</p>
 
             
 
-            <td class="description last"><p>The media type of the call (audio/video).</p></td>
+            <td class="description last"><p>The existing media type of the call (audio/video).</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>newMediaType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The requested media type for the call modification (audio/video).</p></td>
         </tr>
 
 	
@@ -8384,16 +8509,31 @@ Media-modification</p>
     <h4 class="name" id="event:call:modification-in-progress">call:modification-in-progress</h4>
     
     
-    <p class="summary">Modification-in-progress event gets fired when downgrade request was successful.</p>
+    <p class="summary">Transitional event to indicate that a call modification (Upgrade/Downgrade) is taking place.</p>
     
 </dt>
 <dd>
     
     
     <div class="description">
-        <p>There should be an ongoing call where the user has initiated a downgrade request.<br>
-This event is fired in response to a successful call to <code>downgrade</code> or <code>acceptModification</code> method.</p>
-<p>The event is fired with an attached event data of the following format:</p>
+        <p>This event fires in different scenarios:</p>
+<ul>
+<li>After successfully initiating a call modification but before the modification is complete.</li>
+<li>After successfully accepting or rejecting a call modification but before the modification is complete.</li>
+</ul>
+<p>The event handler contains the code to execute when the <code>modification-in-progress</code> event is received by
+this <code>Phone</code>.</p>
+<p><strong> Example </strong></p>
+<pre><code class="lang-js">// using a named function
+phone.on('call:modification-in-progress', handler);
+
+// using an anonymous function
+phone.on('call:modification-in-progress', function (data) { ... });</code></pre>
+<p><strong>Values</strong></p>
+<ul>
+<li><code>handler</code> is the name of the user-defined function, or an anonymous declaration</li>
+<li><code>data</code> contains information about the event, it has the following structure:</li>
+</ul>
     </div>
     
 
@@ -10179,6 +10319,64 @@ The user should have initiated and accepted media modification request.</p>
             
 
             <td class="description last"><p>The media type of the call (audio/video).</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>oldState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The previous state of the call.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name"><code>newState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The new state of the call.</p></td>
         </tr>
 
 	
@@ -17016,7 +17214,7 @@ initialized and ready to make, receive calls</p>
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on 2015-06-05T16:54:17-07:00 using the <a
+		on 2015-06-12T14:19:47-07:00 using the <a
 			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
