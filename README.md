@@ -15,20 +15,14 @@ For full instructions on deploying this SDK and sample app, see the [Enhanced We
 
 ## Summary
 
-* Enroll in the [AT&T Developer Program](http://developer.att.com/)
-  * Set up your org domain, CORS domains
-  * Create your app
-      * Use app scopes that you want (WEBRTCMOBILE and/or WEBRTC)
-      * Setup your virtual numbers if you want
-      * Choose a oAuth callback URL for MOBILE NUMBER user consent
-      * This will provide you an app key and secret.
-* Configure the Node.js sample app package.json with you app_key, app_secret, ewebrtc_domain (org domain),
-  virtual_numbers_pool, oauth_callback
+* Enroll in the [AT&T Developer Program](http://developer.att.com/).
+* Set up your app on the AT&T Developer Program website, configure it for WebRTC and obtain an App Key and App Secret.
+* Configure the Node.js sample app package.json with your App Key, App Secret, ewebrtc_domain (org domain),
+  virtual_numbers_pool, and oauth_callback address.
 * Install the Node.js sample app dependencies by running `$ npm install` in the `node-sample` directory.
-* Start the sample application web server: Run `$ npm start` from the `node-sample` directory
-* Launch a browser to run the sample application: `https://127.0.0.1:9001/`
-  * When initially loading the sample app you will see the error: `NET::ERR_CERT_AUTHORITY_INVALID`
-  	* Workaround: Add a security exception by clicking `Advanced` and then click on `Proceed to 127.0.0.1 (unsafe)`
+* Start the sample app Web server by running `$ npm start` from the `node-sample` directory.
+* Open Firefox or Chrome to run the sample application at the address, `https://127.0.0.1:9001/`
+* When initially loading the sample app you will receive the error, `NET::ERR_CERT_AUTHORITY_INVALID`. You must add a security exception by clicking `Advanced` and then click on `Proceed to 127.0.0.1 (unsafe)`
 
 ## System Requirements
 
